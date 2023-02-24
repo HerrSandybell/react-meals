@@ -9,8 +9,8 @@ const Backdrop = props => {
 
 const ModalOverlay = props => {
   return (
-    <Card>
-      <div className={classes.content}>{props.children}</div>
+    <Card cardClass={classes.content}>
+      {props.children}
     </Card>
   );
 };

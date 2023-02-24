@@ -4,7 +4,7 @@ import DUMMY_MEALS from './dummy-meals';
 import Card from '../UI/Card';
 
 const MealMenu = (props) => {
-  return <Card className={classes.meals}>
+  return <Card cardClass={classes.meals}>
     <ul>
       {DUMMY_MEALS.map((meal) => <MealItem key={meal.id} {...meal} />)}
     </ul>
