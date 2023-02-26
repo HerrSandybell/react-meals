@@ -18,7 +18,7 @@ const MealItemForm = (props) => {
       setIsValidInput(false);
     } else {
       cartCtx.onAddToCart(props.meal, amountNumber);
-      amountInputRef.current.value = '0';
+      amountInputRef.current.value = '1';
       setIsValidInput(true);
     }
   };
@@ -26,7 +26,7 @@ const MealItemForm = (props) => {
   return <form className={classes.form} onSubmit={handleSubmit}>
     <div className={classes.input}>
       <label htmlFor="quantity">Amount</label>
-      <input ref={amountInputRef} type="number" name="quantity" placeholder="0" min="0" max="5" />
+      <input ref={amountInputRef} type="number" name="quantity" min="1" max="5" defaultValue={1} />
     </div>
     <button type="submit">+ Add</button>
     {!isValidInput && <p>Please enter a valid amount (1-5)</p>}

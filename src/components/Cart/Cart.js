@@ -6,6 +6,7 @@ import CartContext from '../../store/cart-context';
 
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
+  const { cartContent } = cartCtx;
 
   const addHandler = item => {
     cartCtx.onAddToCart(item, 1);
@@ -18,7 +19,7 @@ const Cart = (props) => {
   return <Modal onClose={props.onHideCart}>
     <ul className={classes["cart-items"]}>
       {
-        Object.values(cartCtx.cartContent).map((item) => <CartItem
+        cartContent.map((item) => <CartItem
           key={item.name}
           onRemove={removeHandler.bind(null, item.id)}
           onAdd={addHandler.bind(null, item)}
@@ -32,7 +33,7 @@ const Cart = (props) => {
     </div>
     <div className={classes.actions}>
       <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>
-      {Object.values(cartCtx.cartContent).length > 0 && <button className={classes.button}>Order</button>}
+      {cartContent.length > 0 && <button className={classes.button}>Order</button>}
     </div>
   </Modal>;
 };

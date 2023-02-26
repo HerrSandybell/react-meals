@@ -1,53 +1,60 @@
 import React, { useState } from 'react';
 
 const CartContext = React.createContext({
-  cartContent: {},
+  cartContent: [],
   totalAmount: 0,
   onAddToCart: (menuItem, amount) => { },
   onRemoveFromCart: (id) => { }
 });
 
 export const CartContextProvider = (props) => {
-  const [cartContent, setCartContent] = useState({});
+  const [cartContent, setCartContent] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
 
   const addToCart = (menuItem, amount = 1) => {
     setCartContent((cartContent) => {
-      const cartItem = cartContent[menuItem.id];
+      let cartItem = cartContent.find(item => item.id === menuItem.id);
 
+      let updatedCart;
       if (cartItem) {
         cartItem.amount += amount;
+        updatedCart = [...cartContent];
       } else {
-        cartContent[menuItem.id] = { ...menuItem, amount };
+        cartItem = { ...menuItem, amount };
+        updatedCart = cartContent.concat(cartItem);
       }
 
-      setTotalAmount(Object.values(cartContent)
-        .reduce((total, item) => total += (item.price * item.amount), 0));
+      setTotalAmount((oldAmount) => {
+        return oldAmount + (menuItem.price * amount);
+      });
 
-      return cartContent;
+      return updatedCart;
     });
   };
 
   const removeFromCart = (id) => {
     setCartContent((cartContent) => {
-      const cartItem = cartContent[id];
+      const cartItemIndex = cartContent.findIndex(item => item.id === id);
+      const menuItem = cartContent[cartItemIndex];
 
-      if (!cartItem) return cartContent;
+      if (!menuItem) return cartContent;
 
-      if (cartItem.amount === 1) {
-        delete cartContent[id];
+      let updatedCart;
+      if (menuItem.amount === 1) {
+        cartContent.splice(cartItemIndex, 1);
+        updatedCart = [...cartContent];
       } else {
-        cartItem.amount -= 1;
+        menuItem.amount -= 1;
+        updatedCart = [...cartContent];
       }
 
-      setTotalAmount(Object.values(cartContent)
-        .reduce((total, item) => total += (item.price * item.amount), 0));
+      setTotalAmount((oldAmount) => {
+        return oldAmount - menuItem.price;
+      });
 
-      return cartContent;
+      return updatedCart;
     });
-
-    console.log({ cartContent });
   };
 
   return <CartContext.Provider

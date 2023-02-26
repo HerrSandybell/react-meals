@@ -14,7 +14,6 @@ const CartButton = props => {
   const btnClasses = `${classes.button} ${btnIsHighlighted ? classes.bump : ''}`;
 
   useEffect(() => {
-    console.log({ length: Object.values(cartContent).length });
     if (Object.values(cartContent).length === 0) {
       return;
     }
@@ -27,7 +26,7 @@ const CartButton = props => {
     return () => {
       clearTimeout(timer);
     };
-  }, [cartCtx]);
+  }, [cartContent]);
 
   return <>
     <button className={btnClasses} onClick={props.onClick}>
