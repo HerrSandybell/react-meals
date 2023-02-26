@@ -11,7 +11,6 @@ export const CartContextProvider = (props) => {
   const [cartContent, setCartContent] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
-
   const addToCart = (menuItem, amount = 1) => {
     setCartContent((cartContent) => {
       let cartItem = cartContent.find(item => item.id === menuItem.id);
