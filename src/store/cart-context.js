@@ -56,12 +56,18 @@ export const CartContextProvider = (props) => {
     });
   };
 
+  const clearCart = () => {
+    setTotalAmount(0);
+    setCartContent([]);
+  };
+
   return <CartContext.Provider
     value={{
       cartContent,
       totalAmount,
       onAddToCart: addToCart,
-      onRemoveFromCart: removeFromCart
+      onRemoveFromCart: removeFromCart,
+      onClearCart: clearCart
     }}
   >
     {props.children}
