@@ -10,8 +10,9 @@ import { cartActions } from '../../store/cart-slice';
 const Cart = (props) => {
   const dispatch = useDispatch();
   const cartContent = useSelector(state => state.cart.cartContent);
+  const isSubmitting = useSelector(state => state.ui.isLoading);
 
-  const { isLoading: isSubmitting, error, sendRequest } = useHttp();
+  const sendRequest = useHttp();
   const [showCartItems, setShowCartItems] = useState(true);
   const [submitted, setSubmitted] = useState(false);
 
@@ -45,7 +46,6 @@ const Cart = (props) => {
   };
 
   return <Modal onClose={props.onHideCart}>
-    {error && <div>{error.message}</div>}
     {!submitted && <CartModalContent />}
     {submitted && !isSubmitting && <p>Successfully Sent the order</p>}
   </Modal>;

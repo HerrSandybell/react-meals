@@ -1,12 +1,14 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { uiActions } from '../../store/ui-slice';
 
 const useHttp = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   const sendRequest = useCallback(async (requestConfig, applyData) => {
-    setIsLoading(true);
-    setError(null);
+    dispatch(uiActions.setLoading(true));
+    dispatch(uiActions.hideNotification());
+
     try {
       const response = await fetch(requestConfig.url, {
         method: requestConfig.method ? requestConfig.method : 'GET',
@@ -20,19 +22,19 @@ const useHttp = () => {
 
       const data = await response.json();
 
-      setIsLoading(false);
+      dispatch(uiActions.setLoading(false));
 
       return data;
     } catch (err) {
-      setError(err.message || 'Something went wrong!');
+      dispatch(uiActions.showNotification({
+        status: 'error',
+        title: 'Error!',
+        message: err.message || 'Something went wrong!'
+      }));
     }
-  }, []);
+  }, [dispatch]);
 
-  return {
-    isLoading,
-    error,
-    sendRequest,
-  };
+  return sendRequest;
 };
 
 export default useHttp;

@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import React from 'react';
 import classes from './Header.module.css';
 import mealsImage from '../../assets/meals.jpg';
