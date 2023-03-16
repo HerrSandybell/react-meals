@@ -1,20 +1,19 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import classes from './CartButton.module.css';
 import CartIcon from '../Cart/CartIcon';
-import CartContext from '../../store/cart-context';
 
 const CartButton = props => {
   const [btnIsHighlighted, setBtnIsHighlighted] = useState(false);
 
-  const cartCtx = useContext(CartContext);
-  const { cartContent } = cartCtx;
+  const cartContent = useSelector(state => state.cart.cartContent);
 
-  const numberOfItems = Object.values(cartContent).reduce((amount, item) => amount + item.amount, 0);
+  const numberOfItems = cartContent.reduce((amount, item) => amount + item.amount, 0);
 
   const btnClasses = `${classes.button} ${btnIsHighlighted ? classes.bump : ''}`;
 
   useEffect(() => {
-    if (Object.values(cartContent).length === 0) {
+    if (cartContent.length === 0) {
       return;
     }
     setBtnIsHighlighted(true);

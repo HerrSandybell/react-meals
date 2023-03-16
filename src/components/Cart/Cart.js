@@ -1,25 +1,25 @@
-import { useContext, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+
 import Modal from '../UI/Modal';
-import CartContext from '../../store/cart-context';
 import CartItems from './CartItems';
 import Checkout from './Checkout';
 import useHttp from '../hooks/use-http';
+import { cartActions } from '../../store/cart-slice';
 
 const Cart = (props) => {
-  const cartCtx = useContext(CartContext);
-  const { cartContent } = cartCtx;
+  const dispatch = useDispatch();
+  const cartContent = useSelector(state => state.cart.cartContent);
 
   const { isLoading: isSubmitting, error, sendRequest } = useHttp();
   const [showCartItems, setShowCartItems] = useState(true);
   const [submitted, setSubmitted] = useState(false);
-
 
   const changeContentHandler = () => {
     setShowCartItems((state) => !state);
   };
 
   const orderHandler = (customerInfo) => {
-    console.log({ customerInfo, cartContent });
     sendRequest({
       url: 'https://react-test-9ffb7-default-rtdb.firebaseio.com/orders.json',
       method: 'POST',
@@ -32,7 +32,7 @@ const Cart = (props) => {
       }
     }).then(() => {
       setSubmitted(true);
-      cartCtx.onClearCart();
+      dispatch(cartActions.clearCart());
     });
   };
 

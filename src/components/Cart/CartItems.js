@@ -1,34 +1,23 @@
-import { useContext } from 'react';
-import classes from './Cart.module.css';
+import { useSelector } from 'react-redux';
 import CartItem from './CartItem';
-import CartContext from '../../store/cart-context';
+
+import classes from './Cart.module.css';
 
 const CartItems = (props) => {
-  const cartCtx = useContext(CartContext);
-  const { cartContent } = cartCtx;
-
-  const addHandler = item => {
-    cartCtx.onAddToCart(item, 1);
-  };
-
-  const removeHandler = id => {
-    cartCtx.onRemoveFromCart(id);
-  };
+  const { cartContent, totalAmount } = useSelector(state => state.cart);
 
   return <>
     <ul className={classes["cart-items"]}>
       {
         cartContent.map((item) => <CartItem
-          key={item.name}
-          onRemove={removeHandler.bind(null, item.id)}
-          onAdd={addHandler.bind(null, item)}
-          {...item}
+          key={item.id}
+          item={item}
         />)
       }
     </ul>
     <div className={classes.total}>
       <div>Total Amount</div>
-      <div>${cartCtx.totalAmount.toFixed(2)}</div>
+      <div>${totalAmount.toFixed(2)}</div>
     </div>
     <div className={classes.actions}>
       <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>

@@ -1,10 +1,13 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef } from 'react';
+import { cartActions } from '../../store/cart-slice';
+import { useDispatch } from 'react-redux';
+
 import classes from './MealItemForm.module.css';
-import CartContext from '../../store/cart-context';
 
 const MealItemForm = (props) => {
+  const dispatch = useDispatch();
+
   const [isValidInput, setIsValidInput] = useState(true);
-  const cartCtx = useContext(CartContext);
   const amountInputRef = useRef();
 
   const handleSubmit = (e) => {
@@ -16,11 +19,13 @@ const MealItemForm = (props) => {
       amountNumber < 1 ||
       amountNumber > 5) {
       setIsValidInput(false);
-    } else {
-      cartCtx.onAddToCart(props.meal, amountNumber);
-      amountInputRef.current.value = '1';
-      setIsValidInput(true);
+      return;
     }
+
+    dispatch(cartActions.addToCart({ item: props.meal, amount: amountNumber }));
+
+    amountInputRef.current.value = '1';
+    setIsValidInput(true);
   };
 
   return <form className={classes.form} onSubmit={handleSubmit}>
